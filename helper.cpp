@@ -162,6 +162,8 @@ int AgentHelper::Parse( string configFile ,map<string,map<string,string> > &res 
 			{
 				status = VALUE_OVER ;
 				value[valueLength] = 0 ;
+				res[command][key] = value ;
+				status = NEWLINE ;
 			} 
 			else if( c == '\n' )
 			{
@@ -171,6 +173,8 @@ int AgentHelper::Parse( string configFile ,map<string,map<string,string> > &res 
 			} 
 			else if( c == '#' )
 			{
+				value[valueLength] = 0 ;
+				res[command][key] = value ;
 				status = ANNOTATION ;
 			}
 			else

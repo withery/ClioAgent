@@ -145,5 +145,5 @@ int ClioAgent::Run( string config ){
 }
 
 int main( int argc ,char **argv ){
-	ClioAgent().Run( argc > 1 ? argv[1] : "./ClioAgent.conf" ) ;
+	ClioAgent().Run( argc > 1 ? argv[1] : "./clioagent.conf" ) ;
 }
