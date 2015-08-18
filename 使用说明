@@ -8,30 +8,30 @@
 使用说明: 调用细节通过配置文件配置，示例如下
 
  ------------------------------------------------------------------------------------------------------------------------------------
-|1  #[general]                                                                                                                       |
-|2  #postUrl=""                                                                                                                      |
-|3  #postPort=""                                                                                                                     |
-|4                                                                                                                                   |
-|5  [meta]                                                     #默认设置 如果命令条目中没有设置相关项，将使用默认配置                |
-|6  logDir="/home/rhythm/log"                                  #默认日志路径 建议使用绝对路径                                        |
-|7  uploadSwitch=1                                             #上传开关(本版本上传未实现，该开关不起作用)                           | 
-|8  cycleNeeded=0                                              #是否需要循环调用                                                     |
-|9  cycle=1                                                    #循环周期，单位为秒                                                   |  
-|10 holdTime=1                                                 #日志保存时间，单位为小时                                             |
-|11                                                                                                                                  | 
-|12 [top]                                                      #执行的命令名，对应的日志文件名为"命令名_小时"，如"top_2015081013"    |
-|13 commandFormat="top -b -i -n 1"                             #执行的命令，必须项                                                   |  
-|14 cycleNeeded=1                                              #设置为1，则当一次命令执行完毕后，间隔一秒会再次执行                  |
-|15                                                                                                                                  | 
-|16 [vmstat]                                                                                                                         | 
-|17 commandFormat="vmstat -w 1"                                                                                                      | 
-|18                                                                                                                                  | 
-|19 [iostat]                                                                                                                         | 
-|20 commandFormat="iostat -x 1"                                                                                                      |  
-|21                                                                                                                                  | 
-|22 [ping]                                                                                                                           | 
-|23 commandFormat="ping api.weixin.qq.com -c 1 | head -n 2"                                                                          | 
-|24 cycleNeeded=1                                                                                                                    | 
+|1  #[general]                                                                                                                        
+|2  #postUrl=""                                                                                                                       
+|3  #postPort=""                                                                                                                      
+|4                                                                                                                                    
+|5  [meta]                                                     #默认设置 如果命令条目中没有设置相关项，将使用默认配置                 
+|6  logDir="/home/rhythm/log"                                  #默认日志路径 建议使用绝对路径                                         
+|7  uploadSwitch=1                                             #上传开关(本版本上传未实现，该开关不起作用)                             
+|8  cycleNeeded=0                                              #是否需要循环调用                                                      
+|9  cycle=1                                                    #循环周期，单位为秒                                                      
+|10 holdTime=1                                                 #日志保存时间，单位为小时                                              
+|11                                                                                                                                    
+|12 [top]                                                      #执行的命令名，对应的日志文件名为"命令名_小时"，如"top_2015081013"     
+|13 commandFormat="top -b -i -n 1"                             #执行的命令，必须项                                                      
+|14 cycleNeeded=1                                              #设置为1，则当一次命令执行完毕后，间隔一秒会再次执行                   
+|15                                                                                                                                    
+|16 [vmstat]                                                                                                                           
+|17 commandFormat="vmstat -w 1"                                                                                                        
+|18                                                                                                                                    
+|19 [iostat]                                                                                                                           
+|20 commandFormat="iostat -x 1"                                                                                                         
+|21                                                                                                                                    
+|22 [ping]                                                                                                                             
+|23 commandFormat="ping api.weixin.qq.com -c 1 | head -n 2"                                                                            
+|24 cycleNeeded=1                                                                                                                      
  ------------------------------------------------------------------------------------------------------------------------------------
 
  其中meta条目及其所有项均为必须项，必须配置。
