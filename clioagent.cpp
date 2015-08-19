@@ -40,14 +40,15 @@ int ClioAgent::RunCommand( Command & command ,string &errMsg ){
 		printf( "open %s fail\n" ,logFile ) ;
 		return -1 ;
 	}
+	int runFailTimes ;
+	if( helper.CheckLock( command.logDir+"/"+command.commandName+".lk" ,command.commandName ,errMsg ) ){
+		puts( errMsg.c_str() ) ;
+		return 0 ;
+	}
 	do{
-		if( helper.CheckLock( command.logDir+"/"+command.commandName+".lk" ,command.commandName ,errMsg ) ){
-			puts( errMsg.c_str() ) ;
-			return 0 ;
-		}
 		bool runFail = true ;
 		if( ( commandFd = popen( command.commandFormat.c_str() ,"r" ) ) == NULL ){
-			return -1 ;
+			continue ;
 		}
 		while( fgets( ioBuffer ,sizeof(ioBuffer) ,commandFd ) != NULL ){
 			runFail = false ;
@@ -72,7 +73,9 @@ int ClioAgent::RunCommand( Command & command ,string &errMsg ){
 			fflush( logFd ) ;
 		}
 		pclose( commandFd ) ;
-		if( runFail ){
+		if( runFail ) runFailTimes ++ ;
+		else runFailTimes = 0 ;
+		if( runFailTimes > 3 ){
 			printf( "run \"%s\" fail\n" ,command.commandFormat.c_str() ) ;
 			return -1 ;
 		}
