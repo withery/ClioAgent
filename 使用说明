@@ -37,6 +37,9 @@
  其中meta条目及其所有项均为必须项，必须配置。
  命令条目中，commandFormat为必须项，其余均可以选择配置，如不配置，将使用meta条目对应值。
 
+ 在日志路径下，对于每个command会生成一个.lk文件用于加文件锁防止command同时启动多个。如果在conf文件中添加了新的command，直接启动ClioAgent即。
+ 但是如果修改了旧的command条目，必须手动killall ClioAgent，再重新启动方能生效。
+
  对于cycle机制，由于某些工具(如iostat，vmstat)必须保持运行状态才能得到有效数据，故不需要对其进行cycle设置，执行周期由commandFormat中工具本身参数决定。
  对于其余工具(如top,ping)，可以选择通过cycle设定执行周期，也可以通过commandFormand工具本身参数。同时设置时，cycle不起作用，由commandFormat决定
 
