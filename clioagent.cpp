@@ -26,11 +26,11 @@ int ClioAgent::RunCommand( Command & command ,string &errMsg ){
 	char logFile[1024] ,ioBuffer[1024] ,rmOldLog[1024] ,urlBuffer[1024] ;
 	string hour ,currTime ; 
 	helper.GetCurrentTime(hour,currTime) ;
-	snprintf( logFile ,1024 ,"%s/%s_%s" ,
+	snprintf( logFile ,sizeof(logFile) ,"%s/%s_%s" ,
 			command.logDir.c_str() ,
 			command.commandName.c_str() ,
 			hour.c_str() ) ;
-	snprintf( rmOldLog ,1024 ,"find %s -cmin +%d -type f -name \"%s_*\" -exec rm -f {} \\;" ,
+	snprintf( rmOldLog ,sizeof(rmOldLog) ,"find %s -cmin +%d -type f -name \"%s_*\" -exec rm -f {} \\;" ,
 			command.logDir.c_str() ,
 			command.holdTime * 60 ,
 			command.commandName.c_str() ) ;
@@ -57,13 +57,13 @@ int ClioAgent::RunCommand( Command & command ,string &errMsg ){
 			if( mhour != hour ){
 				hour = mhour ;
 				fclose(logFd) ;
-				snprintf( logFile ,1024 ,"%s/%s_%s" ,
+				snprintf( logFile ,sizeof(logFile) ,"%s/%s_%s" ,
 						command.logDir.c_str() ,
 						command.commandName.c_str() ,
 						hour.c_str() ) ;
 				logFd = fopen( logFile ,"a" ) ;
 
-				snprintf( rmOldLog ,1024 ,"find %s -cmin +%d -type f -name \"%s_*\" -exec rm -f {} \\;" ,
+				snprintf( rmOldLog ,sizeof(rmOldLog) ,"find %s -cmin +%d -type f -name \"%s_*\" -exec rm -f {} \\;" ,
 						command.logDir.c_str() ,
 						command.holdTime * 60 ,
 						command.commandName.c_str() ) ;
