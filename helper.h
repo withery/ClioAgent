@@ -5,8 +5,8 @@
  *
  */
 
-#ifndef HELPER_H
-#define HELPER_H
+#ifndef CLIOAGENT_HELPER_H
+#define CLIOAGENT_HELPER_H
 
 #include <map>
 #include <string>
@@ -28,15 +28,15 @@ struct AgentHelper{
 	};
 
 
-	int Parse( string configFile ,map<string,map<string,string> > & res ,string & errMsg ) ;
+	int Parse( const string &configFile ,map<string,map<string,string> > & res ,string & errMsg ) ;
 
 	int GetCurrentTime( string & hour ,string & currTime ) ;
 
-	unsigned int String2Uint( string str ,string & errMsg ) ;
+	unsigned int String2Uint( const string & str ,string & errMsg ) ;
 
 	int PostData( string url ,string data ) ;
 
-	int CheckLock( string file ,string moduleName ,string & errMsg ) ;
+	int CheckLock( const string & file ,const string & moduleName ,string & errMsg ) ;
 } ;
 
-#endif /* PARSE_H */
+#endif /* CLIOAGENT_HELPER_H */

@@ -15,7 +15,7 @@
 
 using namespace std ;
 
-int AgentHelper::Parse( string configFile ,map<string,map<string,string> > &res ,string & errMsg )
+int AgentHelper::Parse( const string &configFile ,map<string,map<string,string> > &res ,string & errMsg )
 {	
 	FILE *config = fopen( configFile.c_str() ,"r" ) ;
 	if( config == NULL ){
@@ -25,22 +25,23 @@ int AgentHelper::Parse( string configFile ,map<string,map<string,string> > &res 
 
 	int line = 1 ;
 	const int buffer_size = 256 ;
-	char c = 0 ,key[buffer_size] ,value[buffer_size] ,command[buffer_size] ,error[buffer_size] ;
+	char c = 0 ,error[buffer_size] ;
+	string key ,value ,command ; 
 	int status = NEWLINE ;
-	int keyLength = 0 ,valueLength = 0 ,commandLength = 0 ;
 
 	while( ( c = fgetc(config) ) != EOF )
 	{
 		if( c == '\n' ) line ++ ;
 		if( status == NEWLINE )
 		{
+			value = key = "" ;
 			if( c == ' ' || c == '\n' || c == '\t' ) 
 				continue ;
 
 			if( c == '[' )
 			{
+				command = "" ;
 				status = GET_COMMAND ;
-				commandLength = 0 ;
 			} 
 			else if( c == '#' )
 			{
@@ -49,20 +50,18 @@ int AgentHelper::Parse( string configFile ,map<string,map<string,string> > &res 
 			else
 			{
 				status = GET_KEY ;
-				keyLength = 0 ;
-				key[keyLength++] = c ;
+				key += c ;
 			}
 		} 
 		else if( status == GET_COMMAND )
 		{
 			if( c == ']' )
 			{
-				command[commandLength] = 0 ;
 				status = COMMAND_OVER ;
 			}
 			else
 			{
-				command[commandLength++] = c ;
+				command += c ;
 			}
 		} 
 		else if( status == COMMAND_OVER )
@@ -87,17 +86,15 @@ int AgentHelper::Parse( string configFile ,map<string,map<string,string> > &res 
 		{
 			if( c == ' ' || c == '\t' )
 			{
-				key[keyLength] = 0 ;
 				status = GET_EQUAL ;	
 			} 
 			else if( c == '=' )
 			{
-				key[keyLength] = 0 ;
 				status = KEY_OVER ;
 			} 
 			else
 			{
-				key[keyLength++] = c ;
+				key += c ;
 			}
 		} 
 		else if( status == GET_EQUAL )
@@ -117,11 +114,10 @@ int AgentHelper::Parse( string configFile ,map<string,map<string,string> > &res 
 		{
 			if( c != ' ' && c != '\t' ) 
 			{
-				valueLength = 0 ;
 				if( c >= '0' && c <= '9' ) 
 				{
 					status = GET_DEG_VALUE ;
-					value[valueLength++] = c ;
+					value += c ;
 				}
 				else if( c == '"' )
 				{
@@ -140,7 +136,6 @@ int AgentHelper::Parse( string configFile ,map<string,map<string,string> > &res 
 			if( c == '"' )
 			{
 				status = VALUE_OVER ;
-				value[valueLength] = 0 ;
 				res[command][key] = value ;
 			} 
 			else if( c == '\n' )
@@ -150,30 +145,27 @@ int AgentHelper::Parse( string configFile ,map<string,map<string,string> > &res 
 				errMsg += error ;
 			} 
 			else 
-				value[valueLength++] = c ;
+				value += c ;
 		} 
 		else if( status == GET_DEG_VALUE )
 		{
 			if( c >= '0' && c <= '9' )
 			{
-				value[valueLength++] = c ;
+				value += c ;
 			} 
 			else if( c == ' ' || c == '\t' )
 			{
 				status = VALUE_OVER ;
-				value[valueLength] = 0 ;
 				res[command][key] = value ;
 				status = NEWLINE ;
 			} 
 			else if( c == '\n' )
 			{
-				value[valueLength] = 0 ;
 				res[command][key] = value ;
 				status = NEWLINE ;
 			} 
 			else if( c == '#' )
 			{
-				value[valueLength] = 0 ;
 				res[command][key] = value ;
 				status = ANNOTATION ;
 			}
@@ -241,7 +233,7 @@ int AgentHelper::GetCurrentTime( string &hour ,string &currTime ){
 	return 0 ;
 }
 
-unsigned int AgentHelper::String2Uint( string str ,string & errMsg ){
+unsigned int AgentHelper::String2Uint( const string & str ,string & errMsg ){
 	unsigned int ret = 0 ;
 	for( int i = 0 ;i < str.size() ;i ++ ){
 		if( str[i] >= '0' && str[i] <= '9' ){
@@ -255,7 +247,7 @@ unsigned int AgentHelper::String2Uint( string str ,string & errMsg ){
 	return ret ;
 }
 
-int AgentHelper::CheckLock( string file ,string moduleName ,string &errMsg ){
+int AgentHelper::CheckLock( const string & file ,const string & moduleName ,string &errMsg ){
 	int fd = fileno(fopen( file.c_str() ,"w+" )) ;
 	if( fd >= 0 ){
 		flock lock;
